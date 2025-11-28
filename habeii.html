@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habeii Studio - フォトスタジオ</title>
+    <!-- Thêm thư viện Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Thêm thư viện AOS (Animate On Scroll) CSS -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Thiết lập font Inter cho giao diện hiện đại -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fc; /* Nền trắng xanh nhạt */
+        }
+        .text-primary-color { color: #FF4081; } /* Hồng rực rỡ, trẻ trung */
+        .bg-primary-color { background-color: #FF4081; }
+        .hover-bg-primary-color:hover { background-color: #e83a74; }
+        .border-primary-color { border-color: #FF4081; }
+
+        .nav-link.active {
+            border-bottom: 2px solid #FF4081;
+            font-weight: 600;
+        }
+
+        /* Hiệu ứng chuyển động mượt mà */
+        .transition-all { transition: all 0.3s ease-in-out; }
+
+        /* Custom scrollbar cho thẩm mỹ */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f7f9fc; }
+        ::-webkit-scrollbar-thumb { background: #FF9800; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #f57c00; }
+    </style>
+</head>
+<body>
+
+<div id="app" class="min-h-screen flex flex-col">
+
+    <!-- NAVIGATION & LANGUAGE SWITCHER -->
+    <header class="shadow-md bg-white sticky top-0 z-50">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <a href="#home" class="text-3xl font-extrabold text-primary-color tracking-wider" data-aos="zoom-in" data-aos-duration="500">Habeii Studio</a>
+
+            <!-- Desktop Navigation -->
+            <nav id="desktop-nav" class="hidden md:flex space-x-6 lg:space-x-10">
+                <!-- Links sẽ được cập nhật bằng JS -->
+            </nav>
+
+            <!-- Language Switcher -->
+            <div class="flex items-center space-x-4">
+                <select id="language-switcher" class="p-2 border border-gray-300 rounded-lg text-sm bg-white cursor-pointer transition-all">
+                    <option value="ja">日本語</option>
+                    <option value="en">English</option>
+                    <option value="vi">Tiếng Việt</option>
+                </select>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-button" class="md:hidden p-2 text-gray-700 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu (Hidden by default) -->
+    <div id="mobile-menu" class="hidden md:hidden fixed inset-0 bg-white z-40 p-6 shadow-xl transform transition-transform duration-300 translate-x-full">
+        <div class="flex justify-end">
+            <button id="mobile-close-button" class="p-2 text-gray-700 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        <nav class="flex flex-col space-y-4 mt-6" id="mobile-nav-links">
+            <!-- Mobile Links sẽ được cập nhật bằng JS -->
+        </nav>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow">
+        <section id="home" class="py-20 lg:py-32 bg-yellow-50/70 border-b border-primary-color/20">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex flex-col lg:flex-row items-center gap-10">
+                <div class="lg:w-1/2">
+                    <h1 class="text-5xl lg:text-7xl font-extrabold leading-tight mb-4 transition-all" data-i18n="home_headline" data-aos="fade-right" data-aos-duration="1000"></h1>
+                    <p class="text-xl text-gray-600 mb-8 transition-all" data-i18n="home_subtext" data-aos="fade-right" data-aos-delay="200"></p>
+                    <a href="#booking" class="inline-block py-3 px-8 text-lg font-bold rounded-full bg-primary-color text-white shadow-xl hover-bg-primary-color transition-all transform hover:scale-105" data-i18n="home_cta" data-aos="fade-right" data-aos-delay="400"></a>
+                </div>
+                <div class="lg:w-1/2 w-full" data-aos="zoom-in" data-aos-delay="400">
+                    <!-- Ảnh minh họa hiện đại, tươi sáng -->
+                    <img src="https://placehold.co/800x550/FF9800/ffffff?text=Habeii+Studio" onerror="this.onerror=null;this.src='https://placehold.co/800x550/FF9800/ffffff?text=Studio+Showcase';" alt="Studio Showcase" class="w-full rounded-2xl shadow-2xl transition-all transform hover:rotate-1 hover:shadow-3xl">
+                </div>
+            </div>
+        </section>
+
+        <!-- SERVICES -->
+        <section id="services" class="py-20 lg:py-24">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-bold text-center mb-12 text-gray-800 transition-all" data-i18n="services_title" data-aos="fade-up"></h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Service Card 1 -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 border border-primary-color/10" data-aos="fade-up" data-aos-delay="100">
+                        <div class="text-primary-color mb-4 text-3xl font-bold">📷</div>
+                        <h3 class="text-xl font-semibold mb-2" data-i18n="service_wedding_title"></h3>
+                        <p class="text-gray-600 text-sm" data-i18n="service_wedding_desc"></p>
+                    </div>
+                    <!-- Service Card 2 -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 border border-primary-color/10" data-aos="fade-up" data-aos-delay="200">
+                        <div class="text-primary-color mb-4 text-3xl font-bold">👶</div>
+                        <h3 class="text-xl font-semibold mb-2" data-i18n="service_family_title"></h3>
+                        <p class="text-gray-600 text-sm" data-i18n="service_family_desc"></p>
+                    </div>
+                    <!-- Service Card 3 -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 border border-primary-color/10" data-aos="fade-up" data-aos-delay="300">
+                        <div class="text-primary-color mb-4 text-3xl font-bold">💼</div>
+                        <h3 class="text-xl font-semibold mb-2" data-i18n="service_portrait_title"></h3>
+                        <p class="text-gray-600 text-sm" data-i18n="service_portrait_desc"></p>
+                    </div>
+                    <!-- Service Card 4 -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 border border-primary-color/10" data-aos="fade-up" data-aos-delay="400">
+                        <div class="text-primary-color mb-4 text-3xl font-bold">🗼</div>
+                        <h3 class="text-xl font-semibold mb-2" data-i18n="service_japan_title"></h3>
+                        <p class="text-gray-600 text-sm" data-i18n="service_japan_desc"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PRICING -->
+        <section id="pricing" class="py-20 lg:py-24 bg-blue-50/70">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-bold text-center mb-12 text-gray-800 transition-all" data-i18n="pricing_title" data-aos="fade-up"></h2>
+                <div class="max-w-4xl mx-auto grid md:grid-cols-3 gap-8">
+                    <!-- Price Card 1: Basic -->
+                    <div class="bg-white p-6 rounded-xl shadow-xl border border-gray-200 flex flex-col transition-all transform hover:scale-[1.02]" data-aos="zoom-in-up" data-aos-delay="100">
+                        <h3 class="text-2xl font-bold mb-2 text-primary-color transition-all" data-i18n="price_basic_title"></h3>
+                        <p class="text-4xl font-extrabold mb-4">¥29,800</p>
+                        <p class="text-gray-500 mb-6 text-sm transition-all" data-i18n="price_basic_tagline"></p>
+                        <ul class="space-y-3 flex-grow mb-6 text-sm">
+                            <li data-i18n="price_basic_feature1"></li>
+                            <li data-i18n="price_basic_feature2"></li>
+                            <li data-i18n="price_basic_feature3"></li>
+                            <li class="text-gray-400 line-through transition-all" data-i18n="price_basic_feature4"></li>
+                        </ul>
+                        <a href="#booking" class="w-full text-center py-3 px-4 rounded-full border border-primary-color text-primary-color font-semibold hover:bg-primary-color hover:text-white transition-all" data-i18n="price_cta"></a>
+                    </div>
+                    <!-- Price Card 2: Standard (Recommended) -->
+                    <div class="bg-primary-color p-8 rounded-xl shadow-2xl ring-4 ring-yellow-400/50 flex flex-col transition-all transform scale-105 hover:scale-110" data-aos="zoom-in-up" data-aos-delay="200">
+                        <p class="text-xs font-bold text-yellow-200 mb-1" data-i18n="recommended_label"></p>
+                        <h3 class="text-3xl font-bold mb-2 text-white transition-all" data-i18n="price_standard_title"></h3>
+                        <p class="text-5xl font-extrabold mb-4 text-white">¥49,800</p>
+                        <p class="text-yellow-100 mb-6 text-sm transition-all" data-i18n="price_standard_tagline"></p>
+                        <ul class="space-y-3 flex-grow mb-6 text-white text-sm">
+                            <li data-i18n="price_standard_feature1"></li>
+                            <li data-i18n="price_standard_feature2"></li>
+                            <li data-i18n="price_standard_feature3"></li>
+                            <li data-i18n="price_standard_feature4"></li>
+                        </ul>
+                        <a href="#booking" class="w-full text-center py-3 px-4 rounded-full bg-white text-primary-color font-bold hover:bg-gray-100 transition-all transform hover:scale-105" data-i18n="price_cta"></a>
+                    </div>
+                    <!-- Price Card 3: Premium -->
+                    <div class="bg-white p-6 rounded-xl shadow-xl border border-gray-200 flex flex-col transition-all transform hover:scale-[1.02]" data-aos="zoom-in-up" data-aos-delay="300">
+                        <h3 class="text-2xl font-bold mb-2 text-primary-color transition-all" data-i18n="price_premium_title"></h3>
+                        <p class="text-4xl font-extrabold mb-4">¥79,800</p>
+                        <p class="text-gray-500 mb-6 text-sm transition-all" data-i18n="price_premium_tagline"></p>
+                        <ul class="space-y-3 flex-grow mb-6 text-sm">
+                            <li data-i18n="price_premium_feature1"></li>
+                            <li data-i18n="price_premium_feature2"></li>
+                            <li data-i18n="price_premium_feature3"></li>
+                            <li data-i18n="price_premium_feature4"></li>
+                        </ul>
+                        <a href="#booking" class="w-full text-center py-3 px-4 rounded-full border border-primary-color text-primary-color font-semibold hover:bg-primary-color hover:text-white transition-all" data-i18n="price_cta"></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PORTFOLIO / GALLERY -->
+        <section id="gallery" class="py-20 lg:py-24">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-bold text-center mb-12 text-gray-800 transition-all" data-i18n="gallery_title" data-aos="fade-up"></h2>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    <!-- Placeholder Images for Portfolio -->
+                    <img src="https://placehold.co/400x600/FFD180/000000?text=Portrait" alt="Portrait Photography" class="w-full h-auto rounded-lg shadow-md object-cover aspect-[2/3] transition-all hover:opacity-80" data-aos="zoom-in" data-aos-delay="100">
+                    <img src="https://placehold.co/400x600/80DEEA/000000?text=Wedding" alt="Wedding Photography" class="w-full h-auto rounded-lg shadow-md object-cover aspect-[2/3] transition-all hover:opacity-80" data-aos="zoom-in" data-aos-delay="200">
+                    <img src="https://placehold.co/600x400/B388FF/000000?text=Family" alt="Family Photography" class="w-full h-auto rounded-lg shadow-md object-cover aspect-[3/2] transition-all hover:opacity-80 col-span-2 md:col-span-1 lg:col-span-2" data-aos="zoom-in" data-aos-delay="300">
+                    <img src="https://placehold.co/400x600/FF8A80/000000?text=Japan" alt="Japan Scenery" class="w-full h-auto rounded-lg shadow-md object-cover aspect-[2/3] transition-all hover:opacity-80" data-aos="zoom-in" data-aos-delay="400">
+                    <img src="https://placehold.co/600x400/C5E1A5/000000?text=Event" alt="Event Photography" class="w-full h-auto rounded-lg shadow-md object-cover aspect-[3/2] transition-all hover:opacity-80" data-aos="zoom-in" data-aos-delay="500">
+                    <img src="https://placehold.co/400x600/FF4081/ffffff?text=Studio" alt="Studio Photoshoot" class="w-full h-auto rounded-lg shadow-md object-cover aspect-[2/3] transition-all hover:opacity-80" data-aos="zoom-in" data-aos-delay="600">
+                </div>
+            </div>
+        </section>
+
+        <!-- BOOKING / CONTACT FORM -->
+        <section id="booking" class="py-20 lg:py-24 bg-primary-color/10">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 max-w-3xl">
+                <h2 class="text-4xl font-bold text-center mb-12 text-gray-800 transition-all" data-i18n="booking_title" data-aos="fade-up"></h2>
+                <div class="bg-white p-8 md:p-10 rounded-xl shadow-2xl border-t-4 border-primary-color" data-aos="fade-up" data-aos-delay="200">
+                    <p class="text-center text-gray-600 mb-6 transition-all" data-i18n="booking_subtext"></p>
+                    <form id="booking-form" class="space-y-4">
+                        <input type="text" id="name" name="name" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-primary-color focus:border-primary-color transition-all" required data-i18n-placeholder="form_name" data-aos="fade-right" data-aos-delay="300">
+                        <input type="email" id="email" name="email" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-primary-color focus:border-primary-color transition-all" required data-i18n-placeholder="form_email" data-aos="fade-right" data-aos-delay="400">
+                        <input type="date" id="date" name="date" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-primary-color focus:border-primary-color transition-all" required data-aos="fade-right" data-aos-delay="500">
+                        <select id="service" name="service" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-primary-color focus:border-primary-color transition-all" required data-aos="fade-right" data-aos-delay="600">
+                            <!-- Options được thêm bằng JS -->
+                        </select>
+                        <textarea id="message" name="message" rows="4" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-primary-color focus:border-primary-color transition-all" required data-i18n-placeholder="form_message" data-aos="fade-right" data-aos-delay="700"></textarea>
+                        <button type="submit" class="w-full py-3 px-4 text-lg font-bold rounded-full bg-primary-color text-white shadow-lg hover-bg-primary-color transition-all transform hover:scale-[1.01]" data-i18n="form_submit" data-aos="zoom-in" data-aos-delay="800"></button>
+                    </form>
+                    <div id="booking-message" class="mt-4 p-4 rounded-lg text-center hidden" role="alert"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BLOG / NEWS -->
+        <section id="blog" class="py-20 lg:py-24">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-bold text-center mb-12 text-gray-800 transition-all" data-i18n="blog_title" data-aos="fade-up"></h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Blog Post 1 -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden transition-all hover:shadow-xl" data-aos="fade-up" data-aos-delay="100">
+                        <img src="https://placehold.co/600x400/FFB74D/000000?text=News+1" alt="Blog Post 1" class="w-full h-48 object-cover">
+                        <div class="p-5">
+                            <p class="text-sm text-gray-500 mb-2" data-i18n="blog_date1"></p>
+                            <h3 class="text-xl font-semibold mb-2" data-i18n="blog_post_title1"></h3>
+                            <p class="text-gray-600 text-sm" data-i18n="blog_post_summary1"></p>
+                        </div>
+                    </div>
+                    <!-- Blog Post 2 -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden transition-all hover:shadow-xl" data-aos="fade-up" data-aos-delay="200">
+                        <img src="https://placehold.co/600x400/A5D6A7/000000?text=News+2" alt="Blog Post 2" class="w-full h-48 object-cover">
+                        <div class="p-5">
+                            <p class="text-sm text-gray-500 mb-2" data-i18n="blog_date2"></p>
+                            <h3 class="text-xl font-semibold mb-2" data-i18n="blog_post_title2"></h3>
+                            <p class="text-gray-600 text-sm" data-i18n="blog_post_summary2"></p>
+                        </div>
+                    </div>
+                    <!-- Blog Post 3 -->
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden transition-all hover:shadow-xl" data-aos="fade-up" data-aos-delay="300">
+                        <img src="https://placehold.co/600x400/90CAF9/000000?text=News+3" alt="Blog Post 3" class="w-full h-48 object-cover">
+                        <div class="p-5">
+                            <p class="text-sm text-gray-500 mb-2" data-i18n="blog_date3"></p>
+                            <h3 class="text-xl font-semibold mb-2" data-i18n="blog_post_title3"></h3>
+                            <p class="text-gray-600 text-sm" data-i18n="blog_post_summary3"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-10" data-aos="fade-up" data-aos-delay="400">
+                    <a href="#" class="inline-flex items-center text-primary-color font-semibold transition-all hover:text-red-500" data-i18n="blog_view_all"></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- STUDIO & TEAM INFO -->
+        <section id="about" class="py-20 lg:py-24 bg-gray-50">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-bold text-center mb-12 text-gray-800 transition-all" data-i18n="about_title" data-aos="fade-up"></h2>
+                <div class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-xl" data-aos="fade-up" data-aos-delay="200">
+                    <p class="text-lg text-gray-700 mb-8 transition-all" data-i18n="about_studio_desc"></p>
+
+                    <h3 class="text-2xl font-semibold mb-6 text-primary-color transition-all" data-i18n="about_team_title"></h3>
+                    <div class="grid grid-cols-2 gap-6">
+                        <!-- Team Member 1: Habeii -->
+                        <div class="flex flex-col items-center text-center p-4 rounded-lg bg-yellow-50" data-aos="fade-right" data-aos-delay="300">
+                            <img src="https://placehold.co/100x100/FFC107/ffffff?text=H" alt="Habeii" class="w-24 h-24 rounded-full object-cover mb-3 ring-2 ring-primary-color p-0.5">
+                            <p class="font-bold text-lg text-gray-800">Habeii</p>
+                            <p class="text-sm text-gray-600 transition-all" data-i18n="team_owner_title"></p>
+                            <p class="text-xs text-gray-500 mt-2 transition-all" data-i18n="team_owner_quote"></p>
+                        </div>
+                        <!-- Team Member 2: Assistant -->
+                        <div class="flex flex-col items-center text-center p-4 rounded-lg bg-blue-50" data-aos="fade-left" data-aos-delay="300">
+                            <img src="https://placehold.co/100x100/4FC3F7/ffffff?text=T" alt="Taro" class="w-24 h-24 rounded-full object-cover mb-3 ring-2 ring-primary-color p-0.5">
+                            <p class="font-bold text-lg text-gray-800">Taro</p>
+                            <p class="text-sm text-gray-600 transition-all" data-i18n="team_assistant_title"></p>
+                            <p class="text-xs text-gray-500 mt-2 transition-all" data-i18n="team_assistant_quote"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ACCESS & CONTACT INFO (Footer is also here for simplicity) -->
+        <section id="contact" class="py-20 lg:py-24 bg-gray-900 text-white">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-3 gap-10">
+                <!-- Contact Info -->
+                <div data-aos="fade-right" data-aos-delay="100">
+                    <h3 class="text-2xl font-bold mb-4 text-primary-color transition-all" data-i18n="contact_title"></h3>
+                    <p class="mb-2 transition-all" data-i18n="contact_address_label"></p>
+                    <p class="font-light">〒160-0022 東京都新宿区新宿 1-1-1 ビル 2F</p>
+                    <p class="mt-4 transition-all" data-i18n="contact_phone_label"></p>
+                    <p class="font-light">03-1234-5678</p>
+                    <p class="mt-4 transition-all" data-i18n="contact_email_label"></p>
+                    <p class="font-light">hello@habeiistudio.jp</p>
+                </div>
+
+                <!-- Google Map Placeholder -->
+                <div class="md:col-span-2" data-aos="zoom-in" data-aos-delay="200">
+                    <h3 class="text-2xl font-bold mb-4 text-primary-color transition-all" data-i18n="map_title"></h3>
+                    <div class="bg-gray-800 h-64 rounded-xl flex items-center justify-center shadow-lg border border-primary-color/50 transition-all">
+                        <p class="text-gray-400" data-i18n="map_placeholder"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-800 text-center p-4 text-sm text-gray-400">
+        &copy; 2025 Habeii Studio. All rights reserved. | <span data-i18n="footer_policy"></span>
+    </footer>
+</div>
+
+<!-- Thêm thư viện AOS JavaScript -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+<script>
+    // Khởi tạo AOS ngay khi script chạy
+    // Tùy chọn: duration (thời gian hiệu ứng), once (chỉ chạy 1 lần)
+    AOS.init({
+        duration: 800,
+        once: true,
+        easing: 'ease-in-out',
+    });
+
+    // Dữ liệu đa ngôn ngữ
+    const translations = {
+        ja: {
+            // Navigation
+            nav_home: "ホーム",
+            nav_services: "プラン紹介",
+            nav_pricing: "料金案内",
+            nav_gallery: "作品 / 実績",
+            nav_booking: "予約・空き状況",
+            nav_blog: "お知らせ・ブログ",
+            nav_about: "店舗情報・スタッフ紹介",
+            nav_contact: "アクセス・問い合わせ",
+            // Home Section
+            home_headline: "東京で最高の瞬間を捉える。",
+            home_subtext: "あなたの個性と美しさを、日本の光と色彩の中で表現します。ウェディング、家族写真、ポートレートまで。",
+            home_cta: "今すぐ予約する",
+            // Services
+            services_title: "撮影プラン",
+            service_wedding_title: "ウェディング＆前撮り",
+            service_wedding_desc: "日本の美しいロケーションでの特別な一日を永遠に。",
+            service_family_title: "家族・ベビー写真",
+            service_family_desc: "自然な笑顔と温かい絆を大切にした家族の記録。",
+            service_portrait_title: "個人ポートレート",
+            service_portrait_desc: "ビジネス用からSNS用まで、あなたらしさを引き出します。",
+            service_japan_title: "日本の観光写真",
+            service_japan_desc: "旅行の思い出をプロのクオリティで。東京の街並みや自然。",
+            // Pricing
+            pricing_title: "料金案内",
+            recommended_label: "おすすめ",
+            price_basic_title: "ベーシックプラン",
+            price_basic_tagline: "短時間の撮影とデータ提供のみ。",
+            price_basic_feature1: "60分の撮影時間",
+            price_basic_feature2: "50枚の修正済みデータ",
+            price_basic_feature3: "オンラインギャラリー",
+            price_basic_feature4: "アルバムオプション",
+            price_standard_title: "スタンダードプラン",
+            price_standard_tagline: "一番人気のパッケージ。バランスの取れた内容です。",
+            price_standard_feature1: "120分の撮影時間 (2箇所)",
+            price_standard_feature2: "150枚以上の修正済みデータ",
+            price_standard_feature3: "プロのヘアメイク付き",
+            price_standard_feature4: "ミニアルバム付き",
+            price_premium_title: "プレミアムプラン",
+            price_premium_tagline: "全てが含まれた最高の体験をあなたに。",
+            price_premium_feature1: "終日貸し切り撮影 (複数箇所)",
+            price_premium_feature2: "全カット修正済みデータ",
+            price_premium_feature3: "豪華なカスタムアルバム",
+            price_premium_feature4: "撮影衣装レンタル無料",
+            price_cta: "このプランを予約",
+            // Gallery
+            gallery_title: "作品 / 実績",
+            // Booking
+            booking_title: "予約・空き状況の確認",
+            booking_subtext: "ご希望の日程、サービス、詳細をご記入ください。24時間以内に折り返しご連絡いたします。",
+            form_name: "お名前",
+            form_email: "メールアドレス",
+            form_message: "ご要望・メッセージ",
+            form_submit: "予約を送信する",
+            form_service_select: "サービスを選択してください...",
+            form_service_wedding: "ウェディング / 前撮り",
+            form_service_family: "家族・ベビー写真",
+            form_service_portrait: "個人ポートレート",
+            form_service_japan: "日本の観光写真",
+            // Blog
+            blog_title: "お知らせ・ブログ",
+            blog_view_all: "全てのお知らせを見る &rarr;",
+            blog_date1: "2025年11月20日",
+            blog_post_title1: "冬の特別割引キャンペーン開始！",
+            blog_post_summary1: "雪景色やイルミネーションでの撮影が20%オフになります。限定5組様。",
+            blog_date2: "2025年11月10日",
+            blog_post_title2: "新ロケーション：京都の紅葉撮影",
+            blog_post_summary2: "今年限定で京都の美しい紅葉シーズンに撮影を承ります。",
+            blog_date3: "2025年10月25日",
+            blog_post_title3: "スタジオ機材を最新モデルに更新しました",
+            blog_post_summary3: "より高画質で鮮やかな写真を提供できるようになりました。",
+            // About
+            about_title: "店舗情報・スタッフ紹介",
+            about_studio_desc: "Habeii Studioは、ただ写真を撮るだけでなく、お客様の物語を大切にするスタジオです。明るくモダンな空間で、リラックスして撮影を楽しんでいただけます。日本の文化とトレンドを取り入れた独自のスタイルが特徴です。",
+            about_team_title: "チーム紹介",
+            team_owner_title: "オーナーフォトグラファー",
+            team_owner_quote: "「カメラを通して、世界中の人々の笑顔を輝かせたい。」",
+            team_assistant_title: "アシスタント・ヘアメイク",
+            team_assistant_quote: "「最高の瞬間を作るための準備は私にお任せください。」",
+            // Contact
+            contact_title: "連絡先",
+            contact_address_label: "住所:",
+            contact_phone_label: "電話:",
+            contact_email_label: "メール:",
+            map_title: "アクセス",
+            map_placeholder: "Google Map Placeholder - Shinjuku, Tokyo",
+            // Footer
+            footer_policy: "プライバシーポリシー"
+        },
+        en: {
+            // Navigation
+            nav_home: "Home",
+            nav_services: "Services",
+            nav_pricing: "Pricing",
+            nav_gallery: "Gallery / Portfolio",
+            nav_booking: "Booking",
+            nav_blog: "Blog / News",
+            nav_about: "Studio & Team",
+            nav_contact: "Contact / Access",
+            // Home Section
+            home_headline: "Capturing Your Best Moments in Tokyo.",
+            home_subtext: "Express your individuality and beauty amidst the light and colors of Japan. From weddings to family portraits.",
+            home_cta: "Book Now",
+            // Services
+            services_title: "Our Photography Services",
+            service_wedding_title: "Wedding & Pre-Wedding",
+            service_wedding_desc: "Immortalize your special day at beautiful locations across Japan.",
+            service_family_title: "Family & Baby Photos",
+            service_family_desc: "Capturing natural smiles and warm family bonds with care.",
+            service_portrait_title: "Personal Portraits",
+            service_portrait_desc: "From professional headshots to social media profiles, we bring out your best.",
+            service_japan_title: "Japan Tourist Photoshoot",
+            service_japan_desc: "Professional quality memories of your trip. Tokyo cityscapes and nature.",
+            // Pricing
+            pricing_title: "Pricing Guide",
+            recommended_label: "Recommended",
+            price_basic_title: "Basic Plan",
+            price_basic_tagline: "Short session with digital data delivery only.",
+            price_basic_feature1: "60 minutes shooting time",
+            price_basic_feature2: "50 Retouched Digital Images",
+            price_basic_feature3: "Online Gallery Access",
+            price_basic_feature4: "Album option",
+            price_standard_title: "Standard Plan",
+            price_standard_tagline: "Our most popular package. Excellent value for a comprehensive session.",
+            price_standard_feature1: "120 minutes shooting time (2 locations)",
+            price_standard_feature2: "150+ Retouched Digital Images",
+            price_standard_feature3: "Professional Hair & Makeup included",
+            price_standard_feature4: "Mini Album included",
+            price_premium_title: "Premium Plan",
+            price_premium_tagline: "The ultimate experience including everything you need.",
+            price_premium_feature1: "Full-day exclusive photoshoot (multiple locations)",
+            price_premium_feature2: "All digital images retouched",
+            price_premium_feature3: "Luxury Custom Album",
+            price_premium_feature4: "Free rental of shooting outfits",
+            price_cta: "Book This Plan",
+            // Gallery
+            gallery_title: "Gallery / Portfolio",
+            // Booking
+            booking_title: "Check Availability & Book",
+            booking_subtext: "Please provide your preferred date, service, and details. We will get back to you within 24 hours.",
+            form_name: "Your Name",
+            form_email: "Email Address",
+            form_message: "Your Request / Message",
+            form_submit: "Send Booking Request",
+            form_service_select: "Select a service...",
+            form_service_wedding: "Wedding / Pre-Wedding",
+            form_service_family: "Family & Baby Photos",
+            form_service_portrait: "Personal Portraits",
+            form_service_japan: "Japan Tourist Photoshoot",
+            // Blog
+            blog_title: "News & Blog",
+            blog_view_all: "View All News &rarr;",
+            blog_date1: "Nov 20, 2025",
+            blog_post_title1: "Winter Special Discount Campaign Started!",
+            blog_post_summary1: "Get 20% off photoshoots in snow or under illuminations. Limited to 5 groups.",
+            blog_date2: "Nov 10, 2025",
+            blog_post_title2: "New Location: Kyoto Autumn Leaves Shoot",
+            blog_post_summary2: "For this year only, we are offering photoshoots during Kyoto's beautiful autumn foliage season.",
+            blog_date3: "Oct 25, 2025",
+            blog_post_title3: "Studio Equipment Upgraded to the Latest Models",
+            blog_post_summary3: "We can now provide higher resolution and more vibrant photographs.",
+            // About
+            about_title: "Studio Information & Team",
+            about_studio_desc: "Habeii Studio is not just about taking pictures; it's about valuing our clients' stories. Enjoy a relaxed photoshoot experience in our bright and modern space. We feature a unique style that blends Japanese culture and modern trends.",
+            about_team_title: "Meet the Team",
+            team_owner_title: "Owner & Head Photographer",
+            team_owner_quote: "\"Through the lens, I want to make the smiles of people around the world shine.\"",
+            team_assistant_title: "Assistant & Hair Stylist",
+            team_assistant_quote: "\"Leave all the preparations for creating the perfect moment to me.\"",
+            // Contact
+            contact_title: "Contact Information",
+            contact_address_label: "Address:",
+            contact_phone_label: "Phone:",
+            contact_email_label: "Email:",
+            map_title: "Access",
+            map_placeholder: "Google Map Placeholder - Shinjuku, Tokyo",
+            // Footer
+            footer_policy: "Privacy Policy"
+        },
+        vi: {
+            // Navigation
+            nav_home: "Giới thiệu",
+            nav_services: "Dịch vụ",
+            nav_pricing: "Bảng giá",
+            nav_gallery: "Album ảnh",
+            nav_booking: "Đặt lịch",
+            nav_blog: "Tin tức / Blog",
+            nav_about: "Về Studio & Đội ngũ",
+            nav_contact: "Liên hệ & Bản đồ",
+            // Home Section
+            home_headline: "Lưu giữ khoảnh khắc đẹp nhất tại Tokyo.",
+            home_subtext: "Thể hiện cá tính và vẻ đẹp của bạn giữa ánh sáng và sắc màu Nhật Bản. Từ ảnh cưới, gia đình đến chân dung cá nhân.",
+            home_cta: "Đặt lịch ngay",
+            // Services
+            services_title: "Các Gói Dịch Vụ",
+            service_wedding_title: "Ảnh Cưới & Pre-Wedding",
+            service_wedding_desc: "Lưu giữ ngày đặc biệt của bạn tại những địa điểm đẹp nhất Nhật Bản.",
+            service_family_title: "Ảnh Gia Đình & Em Bé",
+            service_family_desc: "Ghi lại những nụ cười tự nhiên và sự gắn kết gia đình ấm áp.",
+            service_portrait_title: "Ảnh Chân Dung Cá Nhân",
+            service_portrait_desc: "Từ ảnh công việc đến ảnh mạng xã hội, chúng tôi giúp bạn tỏa sáng.",
+            service_japan_title: "Chụp Ảnh Du Lịch Nhật Bản",
+            service_japan_desc: "Kỷ niệm chuyến đi của bạn với chất lượng chuyên nghiệp. Phố thị Tokyo và cảnh sắc thiên nhiên.",
+            // Pricing
+            pricing_title: "Bảng Giá Chi Tiết",
+            recommended_label: "Gợi ý",
+            price_basic_title: "Gói Cơ Bản",
+            price_basic_tagline: "Chỉ chụp ngắn gọn và giao dữ liệu kỹ thuật số.",
+            price_basic_feature1: "60 phút chụp",
+            price_basic_feature2: "50 ảnh kỹ thuật số đã chỉnh sửa",
+            price_basic_feature3: "Truy cập thư viện trực tuyến",
+            price_basic_feature4: "Tùy chọn Album",
+            price_standard_title: "Gói Tiêu Chuẩn",
+            price_standard_tagline: "Gói phổ biến nhất, cung cấp trải nghiệm toàn diện.",
+            price_standard_feature1: "120 phút chụp (2 địa điểm)",
+            price_standard_feature2: "150+ ảnh kỹ thuật số đã chỉnh sửa",
+            price_standard_feature3: "Bao gồm làm tóc & trang điểm chuyên nghiệp",
+            price_standard_feature4: "Tặng kèm Mini Album",
+            price_premium_title: "Gói Cao Cấp",
+            price_premium_tagline: "Trải nghiệm tối ưu, bao gồm tất cả dịch vụ cao cấp.",
+            price_premium_feature1: "Chụp nguyên ngày (nhiều địa điểm)",
+            price_premium_feature2: "Toàn bộ ảnh kỹ thuật số đã chỉnh sửa",
+            price_premium_feature3: "Album tùy chỉnh sang trọng",
+            price_premium_feature4: "Miễn phí thuê trang phục",
+            price_cta: "Chọn Gói Này",
+            // Gallery
+            gallery_title: "Album Ảnh / Thành Tích",
+            // Booking
+            booking_title: "Kiểm Tra Lịch Trống & Đặt Lịch",
+            booking_subtext: "Vui lòng cung cấp ngày, dịch vụ và chi tiết mong muốn. Chúng tôi sẽ liên hệ lại trong vòng 24 giờ.",
+            form_name: "Tên của bạn",
+            form_email: "Địa chỉ Email",
+            form_message: "Yêu cầu / Tin nhắn",
+            form_submit: "Gửi Yêu Cầu Đặt Lịch",
+            form_service_select: "Chọn dịch vụ...",
+            form_service_wedding: "Ảnh Cưới / Pre-Wedding",
+            form_service_family: "Ảnh Gia Đình & Em Bé",
+            form_service_portrait: "Ảnh Chân Dung Cá Nhân",
+            form_service_japan: "Chụp Ảnh Du Lịch Nhật Bản",
+            // Blog
+            blog_title: "Tin Tức & Blog",
+            blog_view_all: "Xem Tất Cả Tin Tức &rarr;",
+            blog_date1: "20/11/2025",
+            blog_post_title1: "Khởi động Chiến dịch Giảm giá Đặc biệt Mùa đông!",
+            blog_post_summary1: "Giảm 20% cho các buổi chụp ảnh dưới tuyết hoặc ánh đèn. Giới hạn 5 nhóm.",
+            blog_date2: "10/11/2025",
+            blog_post_title2: "Địa điểm mới: Chụp ảnh lá đỏ tại Kyoto",
+            blog_post_summary2: "Chỉ trong năm nay, chúng tôi nhận chụp ảnh tại mùa lá đỏ tuyệt đẹp ở Kyoto.",
+            blog_date3: "25/10/2025",
+            blog_post_title3: "Nâng cấp thiết bị Studio lên mẫu mới nhất",
+            blog_post_summary3: "Giờ đây chúng tôi có thể cung cấp những bức ảnh có độ phân giải cao và rực rỡ hơn.",
+            // About
+            about_title: "Thông Tin Studio & Đội Ngũ",
+            about_studio_desc: "Habeii Studio không chỉ là nơi chụp ảnh, mà còn là nơi trân trọng câu chuyện của khách hàng. Hãy tận hưởng trải nghiệm chụp ảnh thoải mái trong không gian sáng sủa, hiện đại của chúng tôi. Phong cách độc đáo kết hợp văn hóa và xu hướng Nhật Bản.",
+            about_team_title: "Gặp gỡ Đội ngũ",
+            team_owner_title: "Chủ Studio & Nhiếp ảnh gia chính",
+            team_owner_quote: "「Qua ống kính, tôi muốn làm rạng rỡ nụ cười của mọi người trên thế giới.」",
+            team_assistant_title: "Trợ lý & Chuyên viên Trang điểm",
+            team_assistant_quote: "「Hãy để tôi lo liệu mọi sự chuẩn bị để tạo nên khoảnh khắc hoàn hảo.」",
+            // Contact
+            contact_title: "Thông Tin Liên Hệ",
+            contact_address_label: "Địa chỉ:",
+            contact_phone_label: "Điện thoại:",
+            contact_email_label: "Email:",
+            map_title: "Bản Đồ",
+            map_placeholder: "Google Map Placeholder - Shinjuku, Tokyo",
+            // Footer
+            footer_policy: "Chính sách Bảo mật"
+        }
+    };
+
+    const navLinks = [
+        { id: 'home', i18n_key: 'nav_home' },
+        { id: 'services', i18n_key: 'nav_services' },
+        { id: 'pricing', i18n_key: 'nav_pricing' },
+        { id: 'gallery', i18n_key: 'nav_gallery' },
+        { id: 'booking', i18n_key: 'nav_booking' },
+        { id: 'blog', i18n_key: 'nav_blog' },
+        { id: 'about', i18n_key: 'nav_about' },
+        { id: 'contact', i18n_key: 'nav_contact' },
+    ];
+
+    let currentLanguage = localStorage.getItem('lang') || 'ja';
+
+    // --- Core Translation Function ---
+    function translateContent(lang) {
+        const t = translations[lang];
+
+        // 1. Translate all elements with data-i18n attribute
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (t[key]) {
+                el.textContent = t[key];
+            }
+        });
+
+        // 2. Translate all elements with data-i18n-placeholder attribute
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+            const key = el.getAttribute('data-i18n-placeholder');
+            if (t[key]) {
+                el.placeholder = t[key];
+            }
+        });
+
+        // 3. Update Navigation Links (Desktop & Mobile)
+        const renderNav = (containerId, isMobile = false) => {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            container.innerHTML = '';
+            navLinks.forEach(link => {
+                const linkElement = document.createElement('a');
+                linkElement.href = `#${link.id}`;
+                linkElement.textContent = t[link.i18n_key];
+                linkElement.className = isMobile
+                    ? 'block w-full text-left py-2 px-4 rounded-lg text-lg font-medium text-gray-700 hover:bg-primary-color hover:text-white transition-all'
+                    : 'nav-link text-gray-600 hover:text-primary-color py-2 transition-all';
+                linkElement.setAttribute('data-target', link.id);
+                container.appendChild(linkElement);
+            });
+        };
+        renderNav('desktop-nav');
+        renderNav('mobile-nav-links', true);
+
+        // 4. Update Booking Service Options
+        const serviceSelect = document.getElementById('service');
+        if (serviceSelect) {
+            serviceSelect.innerHTML = `
+                <option value="" disabled selected>${t.form_service_select}</option>
+                <option value="wedding">${t.form_service_wedding}</option>
+                <option value="family">${t.form_service_family}</option>
+                <option value="portrait">${t.form_service_portrait}</option>
+                <option value="japan_tour">${t.form_service_japan}</option>
+            `;
+        }
+
+        // 5. Update HTML lang attribute
+        document.documentElement.lang = lang;
+        // 6. Update document title
+        document.title = lang === 'ja' ? "Habeii Studio - フォトスタジオ" : "Habeii Studio - Photography Studio";
+
+        // 7. Update active state of nav links based on scroll
+        updateActiveNavLink();
+    }
+
+    // --- Event Listeners and Initial Load ---
+    document.addEventListener('DOMContentLoaded', () => {
+        const langSwitcher = document.getElementById('language-switcher');
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileCloseButton = document.getElementById('mobile-close-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const bookingForm = document.getElementById('booking-form');
+
+        // Set initial language in switcher
+        langSwitcher.value = currentLanguage;
+        translateContent(currentLanguage);
+
+        // Language Switcher Handler
+        langSwitcher.addEventListener('change', (event) => {
+            currentLanguage = event.target.value;
+            localStorage.setItem('lang', currentLanguage);
+            translateContent(currentLanguage);
+        });
+
+        // Mobile Menu Handlers
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.remove('hidden');
+            setTimeout(() => {
+                mobileMenu.classList.remove('translate-x-full');
+            }, 10); // Small delay for transition to work
+        });
+
+        const closeMobileMenu = () => {
+            mobileMenu.classList.add('translate-x-full');
+            setTimeout(() => {
+                mobileMenu.classList.add('hidden');
+            }, 300); // Wait for transition
+        };
+
+        mobileCloseButton.addEventListener('click', closeMobileMenu);
+        document.getElementById('mobile-nav-links').addEventListener('click', (event) => {
+            if (event.target.tagName === 'A') {
+                closeMobileMenu(); // Close menu when a link is clicked
+            }
+        });
+
+        // Booking Form Submission Handler (Placeholder for functionality)
+        if (bookingForm) {
+            bookingForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const t = translations[currentLanguage];
+                const formMessage = document.getElementById('booking-message');
+
+                // Lấy dữ liệu từ form (Chỉ là giả lập)
+                const formData = {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    date: document.getElementById('date').value,
+                    service: document.getElementById('service').value,
+                    message: document.getElementById('message').value
+                };
+
+                // Giả lập gửi dữ liệu thành công
+                const successMessage = currentLanguage === 'ja'
+                    ? `ありがとうございます！予約リクエストを送信しました。<br>日付: ${formData.date}, サービス: ${formData.service}`
+                    : currentLanguage === 'en'
+                    ? `Thank you! Your booking request has been sent.<br>Date: ${formData.date}, Service: ${formData.service}`
+                    : `Cảm ơn bạn! Yêu cầu đặt lịch của bạn đã được gửi.<br>Ngày: ${formData.date}, Dịch vụ: ${formData.service}`;
+
+                formMessage.innerHTML = successMessage;
+                formMessage.classList.remove('hidden', 'bg-red-100', 'text-red-700');
+                formMessage.classList.add('bg-green-100', 'text-green-700', 'border', 'border-green-400');
+
+                // Reset form sau 3 giây (trừ nút submit)
+                setTimeout(() => {
+                    bookingForm.reset();
+                    formMessage.classList.add('hidden');
+                }, 5000);
+            });
+        }
+
+        // Scroll event for active navigation link highlighting
+        window.addEventListener('scroll', updateActiveNavLink);
+    });
+
+    // --- Active Navigation Highlighting (Đã sửa lỗi cho mục cuối cùng) ---
+    function updateActiveNavLink() {
+        const scrollPosition = window.scrollY + 100; // Add offset for fixed header
+        let activeSectionId = '';
+
+        // Lặp ngược qua các liên kết để tìm mục đang hoạt động.
+        // Mục đầu tiên (tính từ dưới lên) mà phần trên của nó đã qua khỏi vị trí cuộn sẽ là mục đang hoạt động.
+        for (let i = navLinks.length - 1; i >= 0; i--) {
+            const link = navLinks[i];
+            const section = document.getElementById(link.id);
+
+            if (section) {
+                // Thêm một điều kiện đặc biệt cho mục cuối cùng (#contact) nếu cuộn đến cuối trang
+                const isLastSection = i === navLinks.length - 1;
+                const isScrolledToBottom = (window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 5; // Độ lệch 5px
+
+                if (isScrolledToBottom && isLastSection) {
+                    activeSectionId = link.id;
+                    break;
+                }
+                
+                // Logic thông thường: nếu phần tử đã được cuộn qua
+                if (section.offsetTop <= scrollPosition) {
+                    activeSectionId = link.id;
+                    break;
+                }
+            }
+        }
+        
+        // Mặc định là 'home' nếu vẫn ở đầu trang
+        if (!activeSectionId && window.scrollY < 100) {
+            activeSectionId = 'home';
+        }
+
+        // 2. Áp dụng/Loại bỏ các lớp active
+        navLinks.forEach(link => {
+            const desktopLink = document.querySelector(`#desktop-nav a[data-target='${link.id}']`);
+            const mobileLink = document.querySelector(`#mobile-nav-links a[data-target='${link.id}']`);
+
+            const isActive = link.id === activeSectionId;
+
+            if (desktopLink && mobileLink) {
+                if (isActive) {
+                    desktopLink.classList.add('active');
+                    mobileLink.classList.add('active', 'bg-primary-color/10', 'text-primary-color');
+                    mobileLink.classList.remove('hover:bg-primary-color', 'hover:text-white');
+                } else {
+                    desktopLink.classList.remove('active');
+                    mobileLink.classList.remove('active', 'bg-primary-color/10', 'text-primary-color');
+                    mobileLink.classList.add('hover:bg-primary-color', 'hover:text-white');
+                }
+            }
+        });
+    }
+
+</script>
+
+</body>
+</html>
